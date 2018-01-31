@@ -181,20 +181,20 @@ class Node {//class Node define nodes in the network
 			
 	public Integer selectNeighbor(){ //randomly select 1 neighbor from k neighbors
 		int rn = (int)(Math.random() * neighborMap.size()); //randomly pick an index
-        int i = 0;  
-        for (Integer key : neighborMap.keySet()) {  
-            if(i==rn){  
-            	if (neighborMap.get(key) == (double) 0){ //distance = 0, selected itself
-            		return  selectNeighbor(); //try again
-            	}
-            	else{
-            		return key;  //return neighbor's index
-            	}
-            }  
-            i++;  
-        }  
-        return null;  
-    }  
+        	int i = 0;  
+        	for (Integer key : neighborMap.keySet()) {  
+            		if(i==rn){  
+            			if (neighborMap.get(key) == (double) 0){ //distance = 0, selected itself
+            				return  selectNeighbor(); //try again
+            			}
+            			else{
+            				return key;  //return neighbor's index
+            			}
+            		}  
+            		i++;  
+        	}  
+        	return null;  
+    		}  
 			
 	public double computeDistanceSpect(Node a, Node b){ //spectacles topology compute distance
 		int N1 = (int) 2*N/5; //number of nodes in the left circle of spectacles: 2N/5
