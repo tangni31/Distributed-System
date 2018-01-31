@@ -5,7 +5,7 @@ Opreating System: ubuntu-16.04
 Lanuage: Java 8
 Compiler Version: 1.8.0_161
 
-TMAN.java contains 3 class TMAN, Node and Img
+TMAN.java contains 3 classes: TMAN, Node and Img
 Class TMAN contains the main method, it implements Jelasity and Babaoglu's algorithm.
 Node defines all the nodes in the network.
 Img is used for producing the node graph files. 
