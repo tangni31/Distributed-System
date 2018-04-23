@@ -1,13 +1,13 @@
 # Linux-filesystem
-mata/dataserver.py: orignal code Author: David Wolinsky  Version: 0.03, 
+`mata/dataserver.py`: orignal code Author: David Wolinsky  Version: 0.03, 
  
-distributed_file_system.py: orignal code “https://github.com/terencehonles/fusepy/blob/master/examples/memory.py”
+`distributed_file_system.py`: orignal code “https://github.com/terencehonles/fusepy/blob/master/examples/memory.py”
 
-this is a distuributed fuse file system which has one mataserver and multiple data servers.
+This is a simple distuributed fuse file system which has one mataserver and multiple data servers.
 
-all data have 3 replicas in different servers.
+All data have 3 replicas in different servers.
 
-data in data servers will be stored in a round robin fashion and using hash function to store loads evenly.
+Data in data servers will be stored in a round robin fashion and using hash function to store loads evenly.
 
 for example: 
     
@@ -25,6 +25,27 @@ Data sever can dealing with crash (write data into disk using shelve), and when 
 
     eg. if data in server 1 is lost, server 1 can be recovered by reading data in server 2 and server 3.
 
-Server can dealing with data corruption by using crc16 checksum, server can recover corrupted data by reading replicas from other servers.
+Server can dealing with data corruption by using crc16 checksum, server can recover corrupted data by reading replicas from other servers.  
 
-corrupt.py  is a function which can simulate data corruption.
+The reads will be succeed when non-adjacent servers are crashed.   
+Writes will be blocked even if a single server is down.
+
+corrupt.py  is a function which can simulate data corruption.  
+
+To run mataserver: `python metaserver.py <port for metaserver>`  
+
+To run dataserver: `python distributedFS.py <fusemount directory> <metaserver port> <dataservers ports separated by spaces>`  
+For example:
+
+      (N=4): 
+      python metaserver.py 2222 
+      python dataserver.py 0 3333 4444 5555 6666 
+      python dataserver.py 1 3333 4444 5555 6666 
+      python dataserver.py 2 3333 4444 5555 6666 
+      python dataserver.py 3 3333 4444 5555 6666
+      python distributedFS.py fusemount 2222 3333 4444 5555 6666  
+      
+To run corrupt: `python corrupt.py <server port> <path> <replica index>`  
+For example: to corrupt flie '/a/1.txt' in server 2222's replica 1:
+`python corrupt.py 2222 '/a/1.txt' 1`
+
