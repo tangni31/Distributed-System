@@ -16,6 +16,10 @@ For `spectacles topology`, use command line arguments: `java TMAN N k S`
 where N is the total number of nodes, k is the number of neighbors each node maintains, B represents b-topology, S represents spectacles topology.  
 For example: `java TMAN 1000 25 B`
 
-### Sample graphs:   
-![b-topology](https://github.com/tangni31/Distributed-System/blob/master/Topology%20Management%20T-Man%20algorithm/b-topology%20node%20graph%20.png?raw=true)
-![Spectacles-topology](https://github.com/tangni31/Distributed-System/blob/master/Topology%20Management%20T-Man%20algorithm/Spectacles-topology%20node%20graph.png?raw=true)
+### Sample graphs:  
+
+#### b-topology:       
+<img width="550" height="250" src="https://github.com/tangni31/Distributed-System/blob/master/Topology%20Management%20T-Man%20algorithm/b-topology%20node%20graph%20.png?raw=true"/> 
+   
+#### Spectacles-topology:       
+<img width="550" height="250" src="https://github.com/tangni31/Distributed-System/blob/master/Topology%20Management%20T-Man%20algorithm/Spectacles-topology%20node%20graph.png?raw=true"/>
