@@ -7,12 +7,12 @@ import java.util.concurrent.TimeUnit;
 class Task implements Runnable{
 	private int N,k;
 	
-	public Task(int num, int range){
-		this.N = num;
-		this.k = range;
+	public Task(int start, int len){
+		this.N = start;//starting point
+		this.k = len;//length
 	}
 	private long computeSquarSum(int N,int k){//compute (N^2 + (N+1)^2 +...+(N+k-1)^2
-		long sum = 0; //(N^2 + (N+1)^2 +...+(N+k)^2 = (1+2^2+..+(N+k-)^2) - (1^2+2^2+..+N^2) + N^2
+		long sum = 0; //(N^2 + (N+1)^2 +...+(N+k-1)^2 = (1+2^2+..+(N+k-1)^2) - (1^2+2^2+..+N^2) + N^2
 		sum = computSumConsecutive(N+k-1)-computSumConsecutive(N) + N*N;
 		return sum;
 	}
@@ -39,7 +39,7 @@ class Task implements Runnable{
 		boolean pref;
 		sum = computeSquarSum(N,k);
 		pref = isPref(sum);
-		if(pref){
+		if(pref){//if it is valid sequence,add starting point into result.
 			prefsquares.addResult(N);
 		}
 	}
@@ -64,7 +64,7 @@ public class prefsquares {
 		ThreadPoolExecutor executor = new ThreadPoolExecutor(processors-1, processors-1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 		
 		for(int i=1;i<=N;i++){
-			Task task = new Task(i,k);
+			Task task = new Task(i,k);//assign different starting point to different worker thread
 			executor.execute(task);
 		}
 		
