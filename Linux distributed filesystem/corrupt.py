@@ -32,7 +32,7 @@ def corrupt(server_port,path,index):
 	data[j] = dd_corrupt
 	data = [data,index]
 	print('after corruption: ',dd_corrupt)
-	server.put(Binary(path), Binary(pickle.dumps(data)))#put corrupt data back
+	server.put(Binary(path[-1]), Binary(pickle.dumps(data)))#put corrupt data back
 
 
 def hex_to_char(data):
