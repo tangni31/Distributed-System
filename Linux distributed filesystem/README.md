@@ -20,18 +20,25 @@ for example:
                   server 2:   replica 1:'aaaaaaaa,dd'  replica 2:'cccccccc'  replica 3:'bbbbbbbb'
                   server 3:   replica 1:'bbbbbbbb'  replica 2:'aaaaaaaa,dd'  replica 3:'cccccccc'
                   server 1:   replica 1:'cccccccc'  replica 2:'bbbbbbbb'  replica 3:'aaaaaaaa,dd'
-
+![sample](https://github.com/tangni31/Distributed-System/blob/master/Linux%20distributed%20filesystem/img/f1.png?raw=true)    
+Data in one server 
+    
 Data sever can dealing with crash (write data into disk using shelve), and when data in disk is completely lost, server can use replicas from other servers to recover. 
 
-    eg. if data in server 1 is lost, server 1 can be recovered by reading data in server 2 and server 3.
-
-Server can dealing with data corruption by using crc16 checksum, server can recover corrupted data by reading replicas from other servers.  
+    eg. if data in server 1 is lost, server 1 can be recovered by reading data in server 2 and server 3.    
+![sample](https://github.com/tangni31/Distributed-System/blob/master/Linux%20distributed%20filesystem/img/data%20lost.png?raw=true)     
+     
+Server can dealing with data corruption by using crc16 checksum, server can recover corrupted data by reading replicas from other servers.      
+![sample](https://github.com/tangni31/Distributed-System/blob/master/Linux%20distributed%20filesystem/img/corrupt4.png?raw=true)     
+    
 
 The reads will be succeed when non-adjacent servers are crashed.   
-Writes will be blocked even if a single server is down.
-
-corrupt.py  is a function which can simulate data corruption.  
-
+Writes will be blocked even if a single server is down and system will continue retry.    
+![sample](https://github.com/tangni31/Distributed-System/blob/master/Linux%20distributed%20filesystem/img/write_when_down2.png?raw=true)    
+    
+corrupt.py  is a function which can simulate data corruption.     
+![sample](https://github.com/tangni31/Distributed-System/blob/master/Linux%20distributed%20filesystem/img/corrupt1.png?raw=true)    
+    
 To run mataserver: `python metaserver.py <port for metaserver>`  
 
 To run dataserver: `python distributedFS.py <fusemount directory> <metaserver port> <dataservers ports separated by spaces>`  
