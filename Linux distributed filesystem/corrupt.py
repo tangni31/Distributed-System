@@ -47,7 +47,7 @@ if __name__ == '__main__':
         	print('Please input server port path and replica number(0, 1 or 2)')
         	exit(1)
 	server_port = argv[1]
-	path = argv[2]
+	path = argv[2]+argv[3]
 	index = argv[3]#argv[3]=replica number(0,1,2) which replica in server to corrupt
 	corrupt(server_port,path,index)
 
