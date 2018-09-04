@@ -1,7 +1,7 @@
 # Linux-filesystem
 `mata/dataserver.py`: orignal code Author: David Wolinsky  Version: 0.03, 
  
-`distributed_file_system.py`: orignal code https://github.com/terencehonles/fusepy/blob/master/examples/memory.py
+`distributed_file_system.py`: orignal code https://github.com/fusepy/fusepy/blob/master/examples/memory.py
 
 This is a simple distuributed fuse file system which has one mataserver and multiple data servers.
 
