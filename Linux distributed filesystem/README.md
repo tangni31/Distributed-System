@@ -28,7 +28,9 @@ for example:
 <img width="500" height="150" src="https://github.com/tangni31/Distributed-System/blob/master/Linux%20distributed%20filesystem/img/f3.png?raw=true"/> 
 <img width="500" height="150" src="https://github.com/tangni31/Distributed-System/blob/master/Linux%20distributed%20filesystem/img/f4.png?raw=true"/>  
 
-##### File `/one/1.txt` store in 4 different servers 
+##### Figures above shows file `/one/1.txt` with content "1111111122222222333333334444444455" and checksums store in 4 different servers, each server has 3 replicas.      
+    
+      
     
         
 - Data sever can dealing with crash (write data into disk using shelve), and when data in disk is completely lost, server can use replicas from other servers to recover. 
