@@ -1,11 +1,16 @@
 # Linux-filesystem
-`mata/dataserver.py`: orignal code Author: David Wolinsky  Version: 0.03, 
+#### Opreating System: ubuntu-16.04    
+#### Lanuage: Python 2.7
+`mata/dataserver.py`: orignal code Author: David Wolinsky  Version: 0.03    
  
-`distributed_file_system.py`: orignal code https://github.com/fusepy/fusepy/blob/master/examples/memory.py
+`distributed_file_system.py`: orignal code: https://github.com/fusepy/fusepy/blob/master/examples/memory.py
 
 This is a simple distuributed fuse file system which has one mataserver and multiple data servers.
 
 All data have 3 replicas in different servers.    
+
+
+
 
 ## Features
 
@@ -33,12 +38,12 @@ for example:
       
     
         
-- Data sever can dealing with crash (write data into disk using shelve), and when data in disk is completely lost, server can use replicas from other servers to recover. 
+- Data sever can dealing with crash (write data into disk using [shelve](https://docs.python.org/2.7/library/shelve.html)), and when data in disk is completely lost, server can use replicas from other servers to recover. 
 
-    eg. if data in server 1 is lost, server 1 can be recovered by reading data in server 2 and server 3.    
+    eg. if data in server 1 is lost, server 1 can be recovered by reading data in server 2 and server 3:    
 <img width="500" height="300" src="https://github.com/tangni31/Distributed-System/blob/master/Linux%20distributed%20filesystem/img/data%20lost.png?raw=true"/>     
     
-- Server can dealing with data corruption by using `crc16` checksum, server can recover corrupted data by reading replicas from other servers.      
+- Server can dealing with data corruption by using `crc16` checksum, server can recover corrupted data by reading replicas from other servers:      
    <img width="500" height="80" src="https://github.com/tangni31/Distributed-System/blob/master/Linux%20distributed%20filesystem/img/corrupt4.png?raw=true"/> 
 
     
