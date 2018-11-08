@@ -13,6 +13,7 @@ def run(count, clientSocket):
     end = time.time()
     runtime = (end - start) * 1000
     returnData = str(runtime)
+    print(returnData)
     clientSocket.send(returnData.encode('utf-8'))
     clientSocket.close()
 
@@ -31,7 +32,7 @@ def task(count):
 
 
 if __name__ == '__main__':
-    p = Pool(10)
+    #p = Pool()
     port = int(argv[1])
     host = '127.0.0.1'
     ADDR = (host, port)
@@ -44,4 +45,6 @@ if __name__ == '__main__':
         clientSocket, clientAddr = tcpSocket.accept()
         print('conneted from: %s' % clientAddr[0])
         data = clientSocket.recv(BUFSIZ)
-        p.apply_async(run, args=(int(data), clientSocket))
+        t = threading.Thread(target=run(int(data), clientSocket), name='taskThread')
+        t.start()
+        t.join()
