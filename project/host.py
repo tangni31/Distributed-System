@@ -9,6 +9,7 @@ CONTROL = '127.0.0.1'
 CONTROL_PORT = 3000
 CONTROL_ADDR = (CONTROL, CONTROL_PORT)
 
+
 def run(count):
     start = time.time()
     task(count)
