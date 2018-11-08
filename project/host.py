@@ -1,6 +1,7 @@
 import time, math, threading
 from socket import *
 from sys import argv
+from multiprocessing import Pool
 
 
 BUFSIZ = 1024
@@ -30,6 +31,7 @@ def task(count):
 
 
 if __name__ == '__main__':
+    p = Pool(10)
     port = int(argv[1])
     host = '127.0.0.1'
     ADDR = (host, port)
@@ -42,6 +44,4 @@ if __name__ == '__main__':
         clientSocket, clientAddr = tcpSocket.accept()
         print('conneted from: %s' % clientAddr[0])
         data = clientSocket.recv(BUFSIZ)
-        t = threading.Thread(target=run(int(data), clientSocket), name='taskThread')
-        t.start()
-        t.join()
+        p.apply_async(run, args=(int(data), clientSocket))
