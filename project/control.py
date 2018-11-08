@@ -1,70 +1,63 @@
-from socket import *
+import socket
 import random, time, threading
 from sys import argv
 import os
-from multiprocessing import Pool, Manager
+from multiprocessing import Pool, Manager, Process
 
 from algorithms import roundRobin, equal, sensibleRouting
 
 
 ALPHA = 0.2 #memory parameter
-TOTAL_JOB = 30 # total jobs
-JOB_RATE = 200 #  jobs / sec
-serverNames = ['10.10.1.2', '10.10.1.1', '10.10.1.4']
-serverPorts = [5000, 5000, 5000]
+TOTAL_JOB = 10 # total jobs
+JOB_RATE = 2 #  jobs / sec
+serverNames = ['127.0.0.1', '127.0.0.1', '127.0.0.1']
+serverPorts = [4000, 5000, 6000]
+BUFSIZ = 4096
 
 
-LOCK = threading.Lock()
 
-BUFSIZ = 1024
-
-
-def algorithm(ind, time, INDEX):
-    pass
-    #if argv[1] == "EQ":
-    #res = equal()
-    #elif argv[1] == 'RR':
-    #INDEX[0] = roundRobin(ind)
-    #else:
-    #res = sensibleRouting(ind, time, ALPHA)
-
-
-def task_gen(RUN_TIME, INDEX):
+def task_gen(S, INDEX):
     #data = random.randint(90000,120000)
-    data = 200000
-    send(str(data), RUN_TIME, INDEX)
+    data = 400000
+    send(S, str(data), INDEX)
 
 
-def send(data,RUN_TIME, INDEX):
-    global TOTAL_RUN_TIME
+def send(S, data,INDEX):
     ind = INDEX[0]
-    clientSocket = socket(AF_INET, SOCK_STREAM)
     serverName, serverPort = serverNames[ind],serverPorts[ind]
     addr = (serverName, serverPort)
     print(addr)
-    clientSocket.connect(addr)
-    clientSocket.send(data.encode('utf-8'))
-    returnData = clientSocket.recv(BUFSIZ)
-    clientSocket.close()
-    runTime = float(returnData)
-    #algorithm(ind, runTime, INDEX), #update host index
-    #print('Run time is: {:.2f} ms'.format(runTime))#float(returnData.decode('utf-8'))))
-    RUN_TIME += runTime,
+    print(S.type)
+    S.sendto(data.encode(), addr)
 
 
+def receive(S, RUN_TIME, INDEX):
+    while True:
+        returnData, host = S.recvfrom(BUFSIZ)
+        print("received from: " + str(host[0]))
+        runTime = float(returnData.decode())
+        RUN_TIME += runTime,
+        if argv[1] == 'SR':
+            INDEX[0] = sensibleRouting(host[1], runTime, ALPHA)
+            print('-----------------------')
+            print(INDEX[0])
 
-def assign_task(RUN_TIME, INDEX):
-    worker = threading.Thread(target=task_gen(RUN_TIME, INDEX), name='workerThread')
+
+def assign_task(S, INDEX):
+    worker = threading.Thread(target=task_gen(S, INDEX), name='workerThread')
     worker.start()
     worker.join()
 
 
 if __name__ == '__main__':
     manager = Manager()
-    #INDEX = manager.list()
-    #INDEX += 0,
-    INDEX = [0]
+    S = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    S.bind(('127.0.0.1', 3000))
     RUN_TIME = manager.list()
+    INDEX = manager.list()
+    INDEX += 0,
+    recv_pro = Process(target=receive, args=(S, RUN_TIME, INDEX,))
+    recv_pro.start()
     p = Pool()
     prv = time.time()
     cnt = 0
@@ -75,12 +68,18 @@ if __name__ == '__main__':
             print(INDEX)
             #print (now-prv)
             prv = now
-            p.apply_async(assign_task, args=(RUN_TIME,INDEX,))
-            INDEX[0] += 1
-            INDEX[0] %= 3
-            #p.apply_async(task_gen, args=(INDEX, RUN_TIME,))
+            p.apply_async(assign_task, args=(S, INDEX,))
+            if argv[1] == 'RR':
+                INDEX[0] += 1
+                INDEX[0] %= 3
+            elif argv[1] == 'EQ':
+                INDEX[0] = random.choice([0,1,2])
+            else:
+                INDEX[0] = INDEX[0]
             cnt += 1
     p.close()
     p.join()
     t2 = time.time()
-    print('average task run time is: {:.2f} ms'.format(sum(RUN_TIME) / TOTAL_JOB))
+    while len(RUN_TIME) < TOTAL_JOB:
+        continue
+    print('average task run time is: {:.2f} ms'.format((sum(RUN_TIME)) / TOTAL_JOB))
