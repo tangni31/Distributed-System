@@ -15,19 +15,17 @@ serverPorts = [4000, 5000, 6000]
 BUFSIZ = 4096
 
 
-
 def task_gen(S, INDEX):
     #data = random.randint(90000,120000)
     data = 400000
     send(S, str(data), INDEX)
 
 
-def send(S, data,INDEX):
+def send(S, data, INDEX):
     ind = INDEX[0]
     serverName, serverPort = serverNames[ind],serverPorts[ind]
     addr = (serverName, serverPort)
     print(addr)
-    print(S.type)
     S.sendto(data.encode(), addr)
 
 
@@ -39,8 +37,6 @@ def receive(S, RUN_TIME, INDEX):
         RUN_TIME += runTime,
         if argv[1] == 'SR':
             INDEX[0] = sensibleRouting(host[1], runTime, ALPHA)
-            print('-----------------------')
-            print(INDEX[0])
 
 
 def assign_task(S, INDEX):
