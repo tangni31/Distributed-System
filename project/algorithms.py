@@ -1,22 +1,18 @@
 import random, threading
 
 sensibleG = [100, 100, 100] # goal function  for sensible routing
-
+HOST = [4000, 5000, 6000] #host addr
 LOCK = threading.Lock()
 
-def roundRobin(ind):
-    ind += 1
-    ind %= 3
-    return ind
 
-
-def equal():
-    l = [0, 1, 2]
-    return random.choice(l)
-
-
-def sensibleRouting(ind, time, a=0.2):
+def sensibleRouting(host, time, a=0.2):
     global sensibleG
+    if host == HOST[0]:
+        ind = 0
+    elif host == HOST[1]:
+        ind = 1
+    else:
+        ind = 2
     sensibleP = []
     gi = (1 - a) * sensibleG[ind] + a * time #update weight
     p = random.random()
