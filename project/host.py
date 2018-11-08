@@ -8,6 +8,7 @@ BUFSIZ = 4096
 CONTROL = '127.0.0.1'
 CONTROL_PORT = 3000
 CONTROL_ADDR = (CONTROL, CONTROL_PORT)
+HOST = '127.0.0.1'
 
 
 def run(count):
@@ -36,8 +37,7 @@ def task(count):
 if __name__ == '__main__':
     #p = Pool()
     port = int(argv[1])
-    host = '127.0.0.1'
-    ADDR = (host, port)
+    ADDR = (HOST, port)
     S = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     S.bind(ADDR)
     while True:
