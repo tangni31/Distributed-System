@@ -1,21 +1,22 @@
 import time, math, threading
-from socket import *
+import socket
 from sys import argv
 from multiprocessing import Pool
 
 
-BUFSIZ = 1024
+BUFSIZ = 4096
+CONTROL = '127.0.0.1'
+CONTROL_PORT = 3000
+CONTROL_ADDR = (CONTROL, CONTROL_PORT)
 
-
-def run(count, clientSocket):
+def run(count):
     start = time.time()
     task(count)
     end = time.time()
     runtime = (end - start) * 1000
-    returnData = str(runtime)
+    returnData = str(int(runtime))
     print(returnData)
-    clientSocket.send(returnData.encode('utf-8'))
-    clientSocket.close()
+    S.sendto(returnData.encode(), CONTROL_ADDR)
 
 
 def task(count):
@@ -36,15 +37,10 @@ if __name__ == '__main__':
     port = int(argv[1])
     host = '127.0.0.1'
     ADDR = (host, port)
-    tcpSocket = socket(AF_INET, SOCK_STREAM)
-    tcpSocket.bind(ADDR)
-    #set the max number of tcp connection
-    tcpSocket.listen(5)
+    S = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    S.bind(ADDR)
     while True:
-        print('waiting for connection on ' + ADDR[0] + ":"+ str(ADDR[1]))
-        clientSocket, clientAddr = tcpSocket.accept()
-        print('conneted from: %s' % clientAddr[0])
-        data = clientSocket.recv(BUFSIZ)
-        t = threading.Thread(target=run(int(data), clientSocket), name='taskThread')
+        data, addr = S.recvfrom(BUFSIZ)
+        print('Received from %s:%s.' % addr)
+        t = threading.Thread(target=run(int(data.decode())), name='taskThread')
         t.start()
-        t.join()
