@@ -8,10 +8,11 @@ from algorithms import roundRobin, equal, sensibleRouting
 
 
 ALPHA = 0.2 #memory parameter
-TOTAL_JOB = 20 # total jobs
-JOB_RATE = 20 #  jobs / sec
-serverNames = ['localhost', 'localhost', 'localhost']
-serverPorts = [4000, 5000, 6000]
+TOTAL_JOB = 30 # total jobs
+JOB_RATE = 200 #  jobs / sec
+serverNames = ['10.10.1.2', '10.10.1.1', '10.10.1.4']
+serverPorts = [5000, 5000, 5000]
+
 
 LOCK = threading.Lock()
 
@@ -30,7 +31,7 @@ def algorithm(ind, time, INDEX):
 
 def task_gen(RUN_TIME, INDEX):
     #data = random.randint(90000,120000)
-    data = 100000
+    data = 200000
     send(str(data), RUN_TIME, INDEX)
 
 
@@ -40,7 +41,7 @@ def send(data,RUN_TIME, INDEX):
     clientSocket = socket(AF_INET, SOCK_STREAM)
     serverName, serverPort = serverNames[ind],serverPorts[ind]
     addr = (serverName, serverPort)
-    #print(addr)
+    print(addr)
     clientSocket.connect(addr)
     clientSocket.send(data.encode('utf-8'))
     returnData = clientSocket.recv(BUFSIZ)
@@ -64,9 +65,10 @@ if __name__ == '__main__':
     #INDEX += 0,
     INDEX = [0]
     RUN_TIME = manager.list()
-    p = Pool(10)
+    p = Pool()
     prv = time.time()
     cnt = 0
+    t1 = time.time()
     while cnt < TOTAL_JOB:
         now = time.time()
         if now - prv > 1/JOB_RATE:
@@ -80,4 +82,5 @@ if __name__ == '__main__':
             cnt += 1
     p.close()
     p.join()
+    t2 = time.time()
     print('average task run time is: {:.2f} ms'.format(sum(RUN_TIME) / TOTAL_JOB))
